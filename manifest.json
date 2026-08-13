@@ -1,0 +1,21 @@
+{{
+  "short_name": "Tirage",
+  "name": "TIRAGE UNIVERSEL",
+  "icons": [
+    {
+      "src": "logo.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "logo.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "./index.html",
+  "background_color": "#0b1b40",
+  "theme_color": "#2c3e50",
+  "display": "standalone",
+  "orientation": "any"
+}
