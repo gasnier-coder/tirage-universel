@@ -1,15 +1,15 @@
-{{
+{
   "short_name": "Tirage",
   "name": "TIRAGE UNIVERSEL",
   "icons": [
     {
-      "src": "logo.png",
-      "type": "image/png",
+      "src": "icon-192.jpg",
+      "type": "image/jpeg",
       "sizes": "192x192"
     },
     {
-      "src": "logo.png",
-      "type": "image/png",
+      "src": "icon-512.jpg",
+      "type": "image/jpeg",
       "sizes": "512x512"
     }
   ],

@@ -1,13 +1,16 @@
-const CACHE_NAME = 'tirage-universel-v1';
+const CACHE_NAME = 'tirage-universel-v2';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './logo.png',
+  './icon-192.jpg',
+  './icon-512.jpg',
   './draw_start.mp3',
-  './ball_pop.mp3',
+  './ball_pop4.mp3',
   './manifest.json'
-  // Ajoutez ici vos fichiers CSS ou JS externes s'ils existent (ex: './style.css', './script.js')
 ];
+
+// Reste du sw.js inchangé...
 
 // Installation : Mise en cache des ressources
 self.addEventListener('install', (event) => {

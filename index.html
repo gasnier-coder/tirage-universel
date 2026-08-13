@@ -616,7 +616,7 @@
 
         <label>
             Compte à rebours (secondes) :
-            <input type="number" id="countdownInput" min="1" max="5" value="8">
+    <input type="number" id="countdownInput" min="1" max="10" value="3">
         </label>
 
         <div class="birthday-section">
@@ -842,6 +842,7 @@
         isDrawing = true;
         statusText.textContent = 'Prépare-toi…';
 
+        // 1. Jouer le premier son (draw_start.mp3)
         try {
             if (audioStart) {
                 audioStart.currentTime = 0;
@@ -849,11 +850,13 @@
             }
         } catch (e) {}
 
+        // Effet visuel d'agitation de la sphère
         sphere.classList.add('shake');
         setTimeout(() => {
             sphere.classList.remove('shake');
         }, Math.max(600, countdownSeconds * 800));
 
+        // Décompte visuel à l'écran
         for (let i = countdownSeconds; i >= 1; i--) {
             countdownNumber.textContent = i;
             countdownNumber.classList.remove('show');
@@ -865,6 +868,7 @@
 
         await new Promise(resolve => setTimeout(resolve, 150));
 
+        // 2. Lancer le tirage (qui déclenchera le second son ball_pop4.mp3 dans performDraw)
         performDraw();
         isDrawing = false;
     }
@@ -903,6 +907,7 @@
             bigBall.classList.add('hidden');
         }, 3000);
 
+        // Déclenchement du second son au moment où la boule sort
         try {
             if (audioPop) {
                 audioPop.currentTime = 0;
@@ -959,7 +964,6 @@
         }
     }
 
-    // ... Reste du script d'animation inchangé ...
     function startAnimation() {
         if (animationId) cancelAnimationFrame(animationId);
         let lastTime = performance.now();
