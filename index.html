@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Tirage EuroMillions - GASNIER TECH</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: radial-gradient(circle at top, #0b1b40 0%, #02030a 55%, #000000 100%);
+            color: #f5f5f5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Positionnement du logo tout en haut à gauche sans décaler le titre */
+        .logo-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 10;
+        }
+
+        .logo-app {
+            max-width: 120px;
+            height: auto;
+            filter: drop-shadow(0 0 10px rgba(0, 120, 255, 0.6));
+        }
+
+        /* Bloc titres centré par défaut */
+        .titles-block {
+            text-align: center;
+            margin-top: 25px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            margin: 0 0 4px 0;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 800;
+            color: #ffd700;
+            text-shadow:
+                0 0 14px rgba(255, 215, 0, 0.9),
+                0 0 45px rgba(0, 0, 0, 0.9);
+        }
+
+        .sub-title {
+            font-size: 13px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0.75;
+        }
+
+        .results-strip {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto 25px;
+            padding: 10px 20px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #001a4d, #003b9b);
+            box-shadow:
+                0 0 25px rgba(0,0,0,0.9),
+                0 0 30px rgba(0, 86, 255, 0.6);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-sizing: border-box;
+        }
+
+        .results-title {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #ffdd55;
+            white-space: nowrap;
+        }
+
+        .results-balls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .result-ball {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid rgba(0,0,0,0.5);
+            box-shadow:
+                0 2px 6px rgba(0,0,0,0.8),
+                0 0 6px rgba(255,255,255,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 800;
+            color: #1f2933;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            max-width: 1100px;
+            width: 100%;
+            padding-bottom: 40px;
+        }
+
+        /* Cadre des commandes réduit sans vide en bas */
+        .controls {
+            background: radial-gradient(circle at top left, rgba(255,255,255,0.12), rgba(0,0,0,0.9));
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            box-shadow:
+                0 0 18px rgba(0, 0, 0, 0.8),
+                0 0 30px rgba(0, 120, 255, 0.45);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            min-width: 280px;
+            max-width: 310px;
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        .controls::before {
+            content: "";
+            position: absolute;
+            inset: -1px;
+            border-radius: inherit;
+            border: 1px solid rgba(0, 180, 255, 0.35);
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        .controls label {
+            font-size: 13px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .controls input[type="number"] {
+            width: 80px;
+            padding: 5px 8px;
+            border-radius: 6px;
+            border: 1px solid #555;
+            background: #050816;
+            color: #eee;
+            font-weight: bold;
+        }
+
+        /* Section Anniversaire dans les réglages */
+        .birthday-section {
+            border-top: 1px dashed rgba(255, 255, 255, 0.2);
+            padding-top: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .birthday-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #ff7b00;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .btn-file {
+            background: linear-gradient(135deg, #7b2cbf, #9d4edd);
+            color: white;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            text-align: center;
+            cursor: pointer;
+            display: block;
+            transition: all 0.2s;
+        }
+        .btn-file:hover { filter: brightness(1.1); }
+
+        .file-input-wrapper input[type=file] {
+            font-size: 100px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .opacity-slider-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 11px;
+        }
+        .opacity-slider-wrapper input[type=range] {
+            flex-grow: 1;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+
+        .controls button {
+            padding: 10px 12px;
+            border-radius: 999px;
+            border: none;
+            cursor: pointer;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.18s ease;
+            font-size: 11px;
+            width: 100%;
+        }
+
+        #btnInit {
+            background: linear-gradient(135deg, #3d3d3d, #848484);
+            color: #fff;
+        }
+
+        #btnInit:hover {
+            background: linear-gradient(135deg, #4a4a4a, #aaaaaa);
+            transform: translateY(-1px);
+        }
+
+        #btnDraw {
+            background: linear-gradient(135deg, #ff7b00, #ffd000);
+            color: #000;
+            box-shadow: 0 0 14px rgba(255, 215, 0, 0.7);
+        }
+
+        #btnDraw:hover {
+            filter: brightness(1.1);
+            transform: translateY(-1px);
+        }
+
+        #btnReset {
+            background: linear-gradient(135deg, #b00020, #ff5c5c);
+            color: #fff;
+        }
+
+        #btnReset:hover {
+            filter: brightness(1.05);
+            transform: translateY(-1px);
+        }
+
+        #btnFullscreen {
+            background: linear-gradient(135deg, #0056ff, #00c2ff);
+            color: #fff;
+            box-shadow: 0 0 10px rgba(0, 194, 255, 0.4);
+        }
+
+        #btnFullscreen:hover {
+            filter: brightness(1.1);
+            transform: translateY(-1px);
+        }
+
+        .buttons-row {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        .status {
+            font-size: 12px;
+            opacity: 0.85;
+            line-height: 1.4;
+            min-height: 34px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 10px;
+            margin-top: 4px;
+        }
+
+        .on-air {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0.75;
+            justify-content: center;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 10px;
+        }
+
+        .on-air-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #ff3b3b, #800000);
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.9);
+        }
+
+        .sphere-wrapper {
+            position: relative;
+            width: 520px;
+            height: 520px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            perspective: 900px;
+        }
+
+        .sphere {
+            position: relative;
+            width: 480px;
+            height: 480px;
+            border-radius: 50%;
+            background:
+                radial-gradient(circle at 30% 18%, rgba(255,255,255,0.7), transparent 55%),
+                radial-gradient(circle at 70% 80%, #0046a3, #00092a);
+            box-shadow:
+                0 25px 50px rgba(0, 0, 0, 0.9),
+                0 0 90px rgba(0, 86, 255, 0.9) inset;
+            border: 3px solid rgba(210, 230, 255, 0.9);
+            transform-style: preserve-3d;
+            transform: rotateX(12deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden; /* Important pour que l'image reste ronde */
+        }
+
+        /* Image d'anniversaire insérée dans la sphère */
+        .sphere-bg-photo {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            opacity: 0; /* Cachée par défaut */
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            z-index: 1; /* Derrière les boules */
+        }
+
+        .sphere::before {
+            content: "";
+            position: absolute;
+            top: 6%;
+            left: 10%;
+            width: 55%;
+            height: 18%;
+            background: radial-gradient(circle at top,
+                rgba(255,255,255,0.95),
+                rgba(255,255,255,0.0) 70%);
+            opacity: 0.9;
+            transform: rotate(-18deg);
+            z-index: 3; /* Devant la photo pour garder le reflet magique */
+            pointer-events: none;
+        }
+
+        .sphere::after {
+            content: "";
+            position: absolute;
+            inset: 5%;
+            border-radius: 50%;
+            border: 1px dashed rgba(230, 245, 255, 0.35);
+            box-shadow: 0 0 20px rgba(0,0,0,0.7) inset;
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        .balls-container {
+            position: relative;
+            width: 90%;
+            height: 90%;
+            border-radius: 50%;
+            overflow: hidden;
+            z-index: 2; /* Les boules passent par-dessus la photo */
+        }
+
+        /* Base pour toutes les boules */
+        .ball {
+            position: absolute;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 800;
+            color: #1f2933;
+            box-shadow:
+                0 2px 5px rgba(0,0,0,0.8),
+                0 0 5px rgba(255,255,255,0.8);
+            border: 1px solid rgba(0,0,0,0.6);
+            transition: opacity 0.3s, transform 0.3s, filter 0.3s;
+            cursor: default;
+        }
+
+        /* --- Palette de 6 Couleurs 3D --- */
+        .ball-color-0, .result-ball.ball-color-0 { background: radial-gradient(circle at 30% 20%, #ffffff 0%, #f1c40f 60%, #9a7d0a 100%); } /* Jaune */
+        .ball-color-1, .result-ball.ball-color-1 { background: radial-gradient(circle at 30% 20%, #ffffff 0%, #e74c3c 60%, #781e14 100%); } /* Rouge */
+        .ball-color-2, .result-ball.ball-color-2 { background: radial-gradient(circle at 30% 20%, #ffffff 0%, #3498db 60%, #1b4f72 100%); } /* Bleu */
+        .ball-color-3, .result-ball.ball-color-3 { background: radial-gradient(circle at 30% 20%, #ffffff 0%, #2ecc71 60%, #145a32 100%); } /* Vert */
+        .ball-color-4, .result-ball.ball-color-4 { background: radial-gradient(circle at 30% 20%, #ffffff 0%, #9b59b6 60%, #4a235a 100%); } /* Violet */
+        .ball-color-5, .result-ball.ball-color-5 { background: radial-gradient(circle at 30% 20%, #ffffff 0%, #e67e22 60%, #7e3d11 100%); } /* Orange */
+
+        .balls-container.many-balls .ball {
+            width: 28px;
+            height: 28px;
+            font-size: 13px;
+        }
+
+        .ball:hover {
+            transform: scale(1.35);
+            z-index: 5;
+        }
+
+        .ball.drawn {
+            opacity: 0.25;
+            transform: scale(0.85);
+            filter: grayscale(0.6);
+            box-shadow:
+                0 1px 2px rgba(0,0,0,0.9),
+                0 0 2px rgba(255,255,255,0.2);
+        }
+
+        .big-ball {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 190px;
+            height: 190px;
+            border-radius: 50%;
+            background:
+                radial-gradient(circle at 30% 20%, #ffffff, #00d2ff),
+                radial-gradient(circle at 70% 80%, #0050ff, #00112a);
+            box-shadow:
+                0 0 30px rgba(0, 210, 255, 1),
+                0 0 100px rgba(0, 210, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid rgba(0,0,0,0.5);
+            transition: transform 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.1),
+                        box-shadow 0.4s ease,
+                        opacity 0.4s ease;
+            z-index: 10;
+        }
+
+        .big-ball::before {
+            content: "";
+            position: absolute;
+            top: 10%;
+            left: 20%;
+            width: 45%;
+            height: 35%;
+            border-radius: 50%;
+            background: radial-gradient(circle at top,
+                rgba(255,255,255,0.9),
+                rgba(255,255,255,0.0) 70%);
+            opacity: 0.8;
+        }
+
+        /* Pour la grosse boule de résultat, on va adapter son fond en fonction de la couleur tirée dynamiquement */
+        .big-ball-number {
+            font-size: 78px;
+            font-weight: 900;
+            color: #002347;
+            text-shadow:
+                0 0 5px rgba(255,255,255,0.9),
+                0 0 20px rgba(255,255,255,0.8);
+        }
+
+        .big-ball.hidden {
+            opacity: 0;
+            transform: translate(-50%, 40px) scale(0.8);
+            box-shadow: none;
+        }
+
+        .big-ball.pop {
+            animation: bigBallPop 0.5s ease-out;
+        }
+
+        @keyframes bigBallPop {
+            0% { transform: translate(-50%, 40px) scale(0.7); opacity: 0; }
+            60% { transform: translate(-50%, -8px) scale(1.08); opacity: 1; }
+            100% { transform: translate(-50%, 0px) scale(1); }
+        }
+
+        @keyframes shake {
+            0% { transform: rotateX(12deg) translate(0, 0); }
+            20% { transform: rotateX(12deg) translate(-5px, 3px); }
+            40% { transform: rotateX(12deg) translate(5px, -3px); }
+            60% { transform: rotateX(12deg) translate(-4px, 2px); }
+            80% { transform: rotateX(12deg) translate(4px, -2px); }
+            100% { transform: rotateX(12deg) translate(0, 0); }
+        }
+
+        .sphere.shake {
+            animation: shake 0.45s ease;
+        }
+
+        .countdown-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            z-index: 4;
+        }
+
+        .countdown-number {
+            font-size: 110px;
+            font-weight: 900;
+            color: red;
+            text-shadow:
+                0 0 15px rgba(255,255,255,0.9),
+                0 0 45px rgba(255, 215, 0, 0.9);
+            opacity: 0;
+            transform: scale(0.4);
+        }
+
+        .countdown-number.show {
+            animation: countdownAnim 0.85s ease-out forwards;
+        }
+
+        @keyframes countdownAnim {
+            0%   { opacity: 0; transform: scale(0.4); }
+            40%  { opacity: 1; transform: scale(1.1); }
+            100% { opacity: 0; transform: scale(0.4); }
+        }
+
+        @media (max-width: 900px) {
+            .logo-container {
+                position: static;
+                margin-bottom: 10px;
+            }
+            .sphere-wrapper {
+                width: 420px;
+                height: 420px;
+            }
+            .sphere {
+                width: 380px;
+                height: 380px;
+            }
+            .big-ball {
+                width: 160px;
+                height: 160px;
+            }
+            .big-ball-number {
+                font-size: 64px;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .sphere-wrapper {
+                margin-top: 10px;
+                width: 360px;
+                height: 360px;
+            }
+            .sphere {
+                width: 320px;
+                height: 320px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="logo-container">
+    <img src="logo.png" alt="Gasnier Tech" class="logo-app">
+</div>
+
+<div class="titles-block">
+    <h1>TIRAGE UNIVERSEL</h1>
+    <div class="sub-title">Tirage aléatoire parametrable</div>
+</div>
+
+<div class="results-strip">
+    <div class="results-title">Résultats du tirage</div>
+    <div class="results-balls" id="resultsBalls"></div>
+</div>
+
+<div class="container">
+    <div class="controls">
+        <label>
+            Nombre de boules (10 à 100) :
+            <input type="number" id="nbBallsInput" min="10" max="100" value="50">
+        </label>
+
+        <label>
+            Compte à rebours (secondes) :
+            <input type="number" id="countdownInput" min="1" max="5" value="8">
+        </label>
+
+        <div class="birthday-section">
+            <div class="birthday-title">Ajouter une photo</div>
+            <div class="file-input-wrapper">
+                <span class="btn-file">📸 Choisir une photo</span>
+                <input type="file" id="photoInput" accept="image/*">
+            </div>
+            <div class="opacity-slider-wrapper">
+                <span>Opacité :</span>
+                <input type="range" id="opacitySlider" min="0" max="100" value="45">
+            </div>
+        </div>
+
+        <div class="buttons-row">
+            <button id="btnInit">Initialiser</button>
+            <button id="btnDraw">Tirage (Espace)</button>
+            <button id="btnReset">Réinitialiser</button>
+            <button id="btnFullscreen">🖥️ Plein Écran</button>
+        </div>
+
+        <div class="status" id="statusText">
+            Prêt. Initialise pour commencer.
+        </div>
+
+        <div class="on-air">
+            <div class="on-air-dot"></div>
+            EN DIRECT – TIRAGE
+        </div>
+    </div>
+
+    <div class="sphere-wrapper">
+        <div class="sphere" id="sphere">
+            <img src="" alt="Anniversaire" class="sphere-bg-photo" id="spherePhoto">
+            
+            <div class="balls-container" id="ballsContainer"></div>
+
+            <div class="countdown-overlay">
+                <div class="countdown-number" id="countdownNumber">3</div>
+            </div>
+        </div>
+
+        <div class="big-ball hidden" id="bigBall">
+            <div class="big-ball-number" id="bigBallNumber">–</div>
+        </div>
+    </div>
+</div>
+
+<audio id="audioStart">
+    <source src="draw_start.mp3" type="audio/mpeg">
+</audio>
+<audio id="audioPop">
+    <source src="ball_pop.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+    const nbBallsInput = document.getElementById('nbBallsInput');
+    const countdownInput = document.getElementById('countdownInput');
+    const btnInit = document.getElementById('btnInit');
+    const btnDraw = document.getElementById('btnDraw');
+    const btnReset = document.getElementById('btnReset');
+    const btnFullscreen = document.getElementById('btnFullscreen');
+    const statusText = document.getElementById('statusText');
+    const sphere = document.getElementById('sphere');
+    const ballsContainer = document.getElementById('ballsContainer');
+    const bigBall = document.getElementById('bigBall');
+    const bigBallNumber = document.getElementById('bigBallNumber');
+    const resultsBalls = document.getElementById('resultsBalls');
+    const countdownNumber = document.getElementById('countdownNumber');
+    
+    const photoInput = document.getElementById('photoInput');
+    const spherePhoto = document.getElementById('spherePhoto');
+    const opacitySlider = document.getElementById('opacitySlider');
+
+    const audioStart = document.getElementById('audioStart');
+    const audioPop = document.getElementById('audioPop');
+
+    let balls = [];
+    let drawnBalls = [];
+    let initialized = false;
+    let isDrawing = false;
+
+    let ballStates = [];
+    let animationId = null;
+
+    /* Gestion du chargement de la photo */
+    photoInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                spherePhoto.src = event.target.result;
+                spherePhoto.style.opacity = opacitySlider.value / 100;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    /* Gestion du changement d'opacité en temps réel */
+    opacitySlider.addEventListener('input', function(e) {
+        if (spherePhoto.src && spherePhoto.src !== window.location.href) {
+            spherePhoto.style.opacity = e.target.value / 100;
+        }
+    });
+
+    function computeGeometry() {
+        const width = ballsContainer.offsetWidth || 360;
+        const height = ballsContainer.offsetHeight || 360;
+        let cx = width / 2;
+        let cy = height / 2;
+
+        cx += -8;
+        cy += -20;
+
+        const maxRadius = Math.min(cx, width - cx, cy, height - cy);
+        return { width, height, cx, cy, maxRadius };
+    }
+
+    async function createBalls(count) {
+        ballsContainer.innerHTML = '';
+        balls = [];
+        drawnBalls = [];
+        ballStates = [];
+        resultsBalls.innerHTML = '';
+
+        if (count > 60) {
+            ballsContainer.classList.add('many-balls');
+        } else {
+            ballsContainer.classList.remove('many-balls');
+        }
+
+        await new Promise(resolve => requestAnimationFrame(resolve));
+        const geom = computeGeometry();
+
+        for (let i = 1; i <= count; i++) {
+            balls.push(i);
+
+            // On détermine une couleur fixe basée sur le numéro de la boule (0 à 5)
+            const colorIndex = (i - 1) % 6;
+
+            const ballEl = document.createElement('div');
+            ballEl.className = `ball ball-color-${colorIndex}`;
+            ballEl.textContent = i;
+            ballEl.dataset.number = i;
+            ballEl.dataset.colorIndex = colorIndex; // On stocke l'index de la couleur
+            ballsContainer.appendChild(ballEl);
+
+            const radius = ballEl.offsetWidth / 2;
+            const maxR = geom.maxRadius - radius;
+
+            const angle = Math.random() * Math.PI * 2;
+            const r = Math.sqrt(Math.random()) * maxR;
+            const x = geom.cx + Math.cos(angle) * r;
+            const y = geom.cy + Math.sin(angle) * r;
+
+            ballEl.style.left = x + 'px';
+            ballEl.style.top = y + 'px';
+
+            const speed = 0.03 + Math.random() * 0.05;
+            const moveAngle = Math.random() * Math.PI * 2;
+            const vx = Math.cos(moveAngle) * speed;
+            const vy = Math.sin(moveAngle) * speed;
+
+            ballStates.push({
+                number: i,
+                colorIndex: colorIndex,
+                x, y, vx, vy,
+                alive: true,
+                cx: geom.cx,
+                cy: geom.cy,
+                maxRadius: geom.maxRadius
+            });
+        }
+
+        bigBall.className = 'big-ball hidden'; // Reset des classes de couleur de la grosse boule
+        bigBallNumber.textContent = '–';
+
+        startAnimation();
+    }
+
+    function getBallElement(number) {
+        return ballsContainer.querySelector('.ball[data-number="' + number + '"]');
+    }
+
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    async function initDraw() {
+        if (isDrawing) return;
+
+        let count = parseInt(nbBallsInput.value, 10);
+        if (isNaN(count) || count < 10 || count > 100) {
+            statusText.textContent = 'Le nombre de boules doit être entre 10 et 100.';
+            return;
+        }
+
+        await createBalls(count);
+        shuffle(balls);
+        initialized = true;
+        statusText.textContent = 'Tirage prêt. Clique sur "Tirage" ou appuie sur Espace.';
+    }
+
+    async function startCountdownAndDraw() {
+        if (!initialized) {
+            statusText.textContent = 'Commence par cliquer sur "Initialiser".';
+            return;
+        }
+        if (isDrawing) return;
+        if (balls.length === 0) {
+            statusText.textContent = 'Toutes les boules ont été tirées.';
+            return;
+        }
+
+        let countdownSeconds = parseInt(countdownInput.value, 10);
+        if (isNaN(countdownSeconds) || countdownSeconds < 1 || countdownSeconds > 10) {
+            countdownSeconds = 3;
+        }
+
+        isDrawing = true;
+        statusText.textContent = 'Prépare-toi…';
+
+        try {
+            if (audioStart) {
+                audioStart.currentTime = 0;
+                audioStart.play().catch(() => {});
+            }
+        } catch (e) {}
+
+        sphere.classList.add('shake');
+        setTimeout(() => {
+            sphere.classList.remove('shake');
+        }, Math.max(600, countdownSeconds * 800));
+
+        for (let i = countdownSeconds; i >= 1; i--) {
+            countdownNumber.textContent = i;
+            countdownNumber.classList.remove('show');
+            void countdownNumber.offsetWidth;
+            countdownNumber.classList.add('show');
+            await new Promise(resolve => setTimeout(resolve, 800));
+        }
+        countdownNumber.classList.remove('show');
+
+        await new Promise(resolve => setTimeout(resolve, 150));
+
+        performDraw();
+        isDrawing = false;
+    }
+
+    function performDraw() {
+        if (!initialized) return;
+        if (balls.length === 0) {
+            statusText.textContent = 'Toutes les boules ont été tirées.';
+            return;
+        }
+
+        const number = balls.pop();
+        drawnBalls.push(number);
+
+        const ballEl = getBallElement(number);
+        let colorIndex = 0;
+        if (ballEl) {
+            ballEl.classList.add('drawn');
+            colorIndex = ballEl.dataset.colorIndex;
+        }
+
+        const state = ballStates.find(b => b.number === number);
+        if (state) {
+            state.alive = false;
+        }
+
+        // On applique la couleur correspondante à la grosse boule centrale
+        bigBall.className = `big-ball ball-color-${colorIndex}`;
+        bigBallNumber.textContent = number;
+        bigBall.classList.remove('hidden');
+        bigBall.classList.remove('pop');
+        void bigBall.offsetWidth;
+        bigBall.classList.add('pop');
+
+        setTimeout(() => {
+            bigBall.classList.add('hidden');
+        }, 3000);
+
+        try {
+            if (audioPop) {
+                audioPop.currentTime = 0;
+                audioPop.play().catch(() => {});
+            }
+        } catch (e) {}
+
+        // Création de la petite boule de résultat avec la bonne couleur
+        const resultBall = document.createElement('div');
+        resultBall.className = `result-ball ball-color-${colorIndex}`;
+        resultBall.textContent = number;
+        resultsBalls.appendChild(resultBall);
+
+        if (balls.length === 0) {
+            statusText.textContent = 'Tirage terminé. Toutes les boules sont sorties.';
+        } else {
+            statusText.textContent = 'Boule tirée : ' + number + '. Prêt pour la suivante.';
+        }
+    }
+
+    async function resetDrawOnly() {
+        if (isDrawing) return;
+        if (!initialized) {
+            statusText.textContent = 'Clique sur "Initialiser".';
+            return;
+        }
+        const count = parseInt(nbBallsInput.value, 10);
+        await createBalls(count);
+        shuffle(balls);
+        statusText.textContent = 'Tirage réinitialisé. Prêt.';
+    }
+
+    function toggleFullscreen() {
+        if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen();
+            } else if (document.documentElement.webkitRequestFullscreen) {
+                document.documentElement.webkitRequestFullscreen();
+            }
+            btnFullscreen.textContent = "❌ Quitter Plein Écran";
+        } else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            }
+            btnFullscreen.textContent = "🖥️ Plein Écran";
+        }
+    }
+
+    function onFullscreenChange() {
+        if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+            btnFullscreen.textContent = "🖥️ Plein Écran";
+        }
+    }
+
+    // ... Reste du script d'animation inchangé ...
+    function startAnimation() {
+        if (animationId) cancelAnimationFrame(animationId);
+        let lastTime = performance.now();
+
+        function animate(now) {
+            const dt = now - lastTime;
+            lastTime = now;
+            const ballEls = ballsContainer.querySelectorAll('.ball');
+
+            ballStates.forEach((state, index) => {
+                if (!state.alive) return;
+                const el = ballEls[index];
+                if (!el) return;
+
+                state.x += state.vx * dt;
+                state.y += state.vy * dt;
+
+                const dx = state.x - state.cx;
+                const dy = state.y - state.cy;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+
+                const radius = (el.offsetWidth / 2) || 17;
+                const maxR = state.maxRadius - radius;
+
+                if (dist > maxR) {
+                    const nx = dx / (dist || 1);
+                    const ny = dy / (dist || 1);
+                    state.x = state.cx + nx * maxR;
+                    state.y = state.cy + ny * maxR;
+
+                    const dot = state.vx * nx + state.vy * ny;
+                    state.vx = state.vx - 2 * dot * nx;
+                    state.vy = state.vy - 2 * dot * ny;
+                }
+
+                state.vx += (Math.random() - 0.5) * 0.0004;
+                state.vy += (Math.random() - 0.5) * 0.0004;
+
+                el.style.left = state.x + 'px';
+                el.style.top = state.y + 'px';
+            });
+            animationId = requestAnimationFrame(animate);
+        }
+        animationId = requestAnimationFrame(animate);
+    }
+
+    btnInit.addEventListener('click', () => { initDraw(); });
+    btnDraw.addEventListener('click', () => { startCountdownAndDraw(); });
+    btnReset.addEventListener('click', () => { resetDrawOnly(); });
+    btnFullscreen.addEventListener('click', toggleFullscreen);
+
+    document.addEventListener('fullscreenchange', onFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', onFullscreenChange);
+
+    document.addEventListener('keydown', (e) => {
+        if (e.code === 'Space') {
+            e.preventDefault();
+            startCountdownAndDraw();
+        }
+    });
+
+    window.addEventListener('load', () => {
+        initDraw();
+    });
+</script>
+</body>
+</html>
