@@ -915,6 +915,15 @@
             }
         } catch (e) {}
 
+        // Annonce vocale du numéro tiré
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel(); // Annule toute annonce en cours
+            const utterance = new SpeechSynthesisUtterance("Numéro " + number);
+            utterance.lang = 'fr-FR';
+            utterance.rate = 0.9;
+            window.speechSynthesis.speak(utterance);
+        }
+
         // Création de la petite boule de résultat avec la bonne couleur
         const resultBall = document.createElement('div');
         resultBall.className = `result-ball ball-color-${colorIndex}`;
