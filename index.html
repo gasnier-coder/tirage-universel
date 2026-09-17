@@ -921,14 +921,25 @@
             }
         } catch (e) {}
 
-        // Annonce vocale du numéro tiré
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.cancel(); // Annule toute annonce en cours
-            const utterance = new SpeechSynthesisUtterance("Numéro " + number);
-            utterance.lang = 'fr-FR';
-            utterance.rate = 0.9;
-            window.speechSynthesis.speak(utterance);
-        }
+// Annonce vocale du numéro tiré
+if ('speechSynthesis' in window) {
+    // Récupération de la liste des voix disponibles
+    const voices = window.speechSynthesis.getVoices();
+    const utterance = new SpeechSynthesisUtterance("Numéro " + number);
+    
+    // Attribution explicite d'une voix française disponible
+    const frVoice = voices.find(v => v.lang.startsWith('fr'));
+    if (frVoice) {
+        utterance.voice = frVoice;
+    }
+
+    utterance.lang = 'fr-FR';
+    utterance.rate = 0.9;
+
+    // Déblocage explicite si la synthèse est en pause/bloquée
+    window.speechSynthesis.resume();
+    window.speechSynthesis.speak(utterance);
+}
 
         // Création de la petite boule de résultat avec la bonne couleur
         const resultBall = document.createElement('div');
