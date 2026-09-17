@@ -673,6 +673,12 @@
 </audio>
 
 <script>
+    // Chargement forcé des voix au démarrage pour la synthèse vocale en ligne
+    if ('speechSynthesis' in window) {
+        window.speechSynthesis.getVoices();
+        window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+    }
+
     const nbBallsInput = document.getElementById('nbBallsInput');
     const countdownInput = document.getElementById('countdownInput');
     const btnInit = document.getElementById('btnInit');
@@ -1014,7 +1020,7 @@
                 el.style.left = state.x + 'px';
                 el.style.top = state.y + 'px';
             });
-            animationId = requestAnimationFrame(animate);
+            animationId = requestAnimationFrame(animationId);
         }
         animationId = requestAnimationFrame(animate);
     }
