@@ -1,16 +1,18 @@
-{
+{{
   "short_name": "Tirage",
   "name": "TIRAGE UNIVERSEL",
   "icons": [
     {
       "src": "icon-192.jpg",
-      "type": "image/png",
-      "sizes": "192x192"
+      "type": "image/jpeg",
+      "sizes": "192x192",
+      "purpose": "maskable any"
     },
     {
       "src": "icon-512.jpg",
       "type": "image/jpeg",
-      "sizes": "512x512"
+      "sizes": "512x512",
+      "purpose": "maskable any"
     }
   ],
   "start_url": "./index.html",
