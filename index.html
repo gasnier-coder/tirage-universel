@@ -5,7 +5,7 @@
 <meta name="theme-color" content="#2c3e50">
 <link rel="apple-touch-icon" href="logo.png">
     <meta charset="UTF-8">
-    <title>Tirage Numéros - GASNIER TECH</title>
+    <title>Tirage EuroMillions - GASNIER TECH</title>
     <style>
         body {
             margin: 0;
@@ -610,13 +610,13 @@
 <div class="container">
     <div class="controls">
         <label>
-            Nombre de boules (10 à 150) :
+            Nombre de boules (10 à 100) :
             <input type="number" id="nbBallsInput" min="10" max="100" value="50">
         </label>
 
         <label>
             Compte à rebours (secondes) :
-    <input type="number" id="countdownInput" min="1" max="10" value="8">
+    <input type="number" id="countdownInput" min="1" max="10" value="3">
         </label>
 
         <div class="birthday-section">
@@ -666,19 +666,13 @@
 </div>
 
 <audio id="audioStart">
-    <source src="SON TIRAGE.mp3" type="audio/mpeg">
+    <source src="draw_start.mp3" type="audio/mpeg">
 </audio>
 <audio id="audioPop">
-    <source src="ball_pop4.mp3" type="audio/mpeg">
+    <source src="ball_pop.mp3" type="audio/mpeg">
 </audio>
 
 <script>
-    // Chargement forcé des voix au démarrage pour la synthèse vocale en ligne
-    if ('speechSynthesis' in window) {
-        window.speechSynthesis.getVoices();
-        window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
-    }
-
     const nbBallsInput = document.getElementById('nbBallsInput');
     const countdownInput = document.getElementById('countdownInput');
     const btnInit = document.getElementById('btnInit');
@@ -921,26 +915,6 @@
             }
         } catch (e) {}
 
-// Annonce vocale du numéro tiré
-if ('speechSynthesis' in window) {
-    // Récupération de la liste des voix disponibles
-    const voices = window.speechSynthesis.getVoices();
-    const utterance = new SpeechSynthesisUtterance("Numéro " + number);
-    
-    // Attribution explicite d'une voix française disponible
-    const frVoice = voices.find(v => v.lang.startsWith('fr'));
-    if (frVoice) {
-        utterance.voice = frVoice;
-    }
-
-    utterance.lang = 'fr-FR';
-    utterance.rate = 0.9;
-
-    // Déblocage explicite si la synthèse est en pause/bloquée
-    window.speechSynthesis.resume();
-    window.speechSynthesis.speak(utterance);
-}
-
         // Création de la petite boule de résultat avec la bonne couleur
         const resultBall = document.createElement('div');
         resultBall.className = `result-ball ball-color-${colorIndex}`;
@@ -1031,7 +1005,7 @@ if ('speechSynthesis' in window) {
                 el.style.left = state.x + 'px';
                 el.style.top = state.y + 'px';
             });
-
+            animationId = requestAnimationFrame(animate);
         }
         animationId = requestAnimationFrame(animate);
     }
