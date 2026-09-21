@@ -534,7 +534,7 @@
         .countdown-number {
             font-size: 110px;
             font-weight: 900;
-            color: red;
+            color: yellow;
             text-shadow:
                 0 0 15px rgba(255,255,255,0.9),
                 0 0 45px rgba(255, 215, 0, 0.9);
@@ -616,7 +616,7 @@
 
         <label>
             Compte à rebours (secondes) :
-    <input type="number" id="countdownInput" min="1" max="10" value="3">
+    <input type="number" id="countdownInput" min="1" max="10" value="8">
         </label>
 
         <div class="birthday-section">
@@ -902,6 +902,10 @@
         bigBall.classList.remove('pop');
         void bigBall.offsetWidth;
         bigBall.classList.add('pop');
+		
+		if ('speechSynthesis' in window) {
+            window.speechSynthesis.speak(new SpeechSynthesisUtterance("Numéro " + number));
+        }
 
         setTimeout(() => {
             bigBall.classList.add('hidden');
