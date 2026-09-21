@@ -5,7 +5,7 @@
 <meta name="theme-color" content="#2c3e50">
 <link rel="apple-touch-icon" href="logo.png">
     <meta charset="UTF-8">
-    <title>Tirage EuroMillions - GASNIER TECH</title>
+    <title>Tirage au sort universel - GASNIER TECH</title>
     <style>
         body {
             margin: 0;
@@ -666,7 +666,7 @@
 </div>
 
 <audio id="audioStart">
-    <source src="SON TIRAGE.mp3" type="audio/mpeg">
+    <source src="draw-start.mp3" type="audio/mpeg">
 </audio>
 <audio id="audioPop">
     <source src="ball_pop.mp3" type="audio/mpeg">
@@ -842,7 +842,7 @@
         isDrawing = true;
         statusText.textContent = 'Prépare-toi…';
 
-        // 1. Jouer le premier son (SON TIRAGE.mp3)
+        // 1. Jouer le premier son (draw-start.mp3)
         try {
             if (audioStart) {
                 audioStart.currentTime = 0;
