@@ -3,8 +3,8 @@ const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './logo.png',
-  './icon-192.jpg',
-  './icon-512.jpg',
+  './icon-192.png',
+  './icon-512.png',
   './draw_start.mp3',
   './ball_pop4.mp3',
   './manifest.json'
