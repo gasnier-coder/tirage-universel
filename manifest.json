@@ -1,6 +1,6 @@
 {
-  "name": "Tirage Universel",
-  "short_name": "Tirage",
+  "name": "Tirage Universelv2",
+  "short_name": "Tiragev2",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#121212",
